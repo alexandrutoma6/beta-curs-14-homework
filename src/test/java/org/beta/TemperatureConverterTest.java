@@ -2,6 +2,7 @@ package org.beta;
 
 import org.assertj.core.data.Offset;
 import org.beta.convertors.TemperatureConverter;
+import org.beta.exceptions.NullParameterException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.assertj.core.api.Assertions;
@@ -29,14 +30,26 @@ public class TemperatureConverterTest {
     @Test
     @DisplayName("CONVERT CELSIUS TEMPERATURE TO FAHRENHEIT")
     public void convertCelsiusToFahrenheit() {
-        double result = TemperatureConverter.celsiusToFahrenheit(100);
+        double result = TemperatureConverter.celsiusToFahrenheit(100d);
         Assertions.assertThat(result).isEqualTo(212);
     }
 
     @Test
     @DisplayName("CONVERT FAHRENHEIT TEMPERATURE TO CELSIUS")
     public void convertFahrenheitToCelsius() {
-        double result = TemperatureConverter.fahrenheitToCelsius(100);
+        double result = TemperatureConverter.fahrenheitToCelsius(100d);
         Assertions.assertThat(result).isCloseTo(37.78, Offset.offset(0.01));
+    }
+
+    @Test
+    @DisplayName("THROWS AN EXCEPTION IF THE PARAMETER IS NULL ON C->F")
+    public void methodThrowsExceptionOnNullParameterForCelsiusToFahrenheit() {
+        org.junit.jupiter.api.Assertions.assertThrows(NullParameterException.class, () -> TemperatureConverter.celsiusToFahrenheit(null));
+    }
+
+    @Test
+    @DisplayName("THROWS AN EXCEPTION IF THE PARAMETER IS NULL ON F->C")
+    public void methodThrowsExceptionOnNullParameterForFahrenheitToCelsius() {
+        org.junit.jupiter.api.Assertions.assertThrows(NullParameterException.class, () -> TemperatureConverter.fahrenheitToCelsius(null));
     }
 }
