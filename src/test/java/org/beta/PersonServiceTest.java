@@ -3,7 +3,6 @@ package org.beta;
 import org.assertj.core.api.Assertions;
 import org.beta.exceptions.IdNotFoundException;
 import org.beta.exceptions.InvalidParameterException;
-import org.beta.exceptions.NullParameterException;
 import org.beta.exceptions.ObjectNotFoundInListException;
 import org.beta.models.Person;
 import org.beta.services.PersonService;
@@ -15,9 +14,16 @@ import java.util.List;
 
 public class PersonServiceTest {
 
+    private PersonService personService;
+
     @BeforeEach
     public void setUp() {
         PersonService.resetIdCounter();
+        personService = new PersonService();
+
+        personService.addPerson(new Person("Alex", 21));
+        personService.addPerson(new Person("Ana", 22));
+        personService.addPerson(new Person("Mihai", 23));
     }
 
     @Test
@@ -29,32 +35,24 @@ public class PersonServiceTest {
     @Test
     @DisplayName("CALL addPerson() METHOD")
     public void callAddMethod() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
+        personService.addPerson(new Person("John", 30));
     }
 
     @Test
     @DisplayName("CALL removePerson() METHOD")
     public void callRemoveMethod() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
         personService.removePerson(1);
     }
 
     @Test
     @DisplayName("THROWS AN EXCEPTION IF ID IS NOT FOUND IN THE LIST")
     public void methodThrowsExceptionIfTheIDIsNotFound() {
-        PersonService personService = new PersonService();
-        org.junit.jupiter.api.Assertions.assertThrows(IdNotFoundException.class, () -> personService.removePerson(1));
+        org.junit.jupiter.api.Assertions.assertThrows(IdNotFoundException.class, () -> personService.removePerson(99));
     }
 
     @Test
     @DisplayName("CALL METHOD THAT RETURNS LIST OF PERSONS")
     public void callGetAllPersons() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
-        personService.addPerson(new Person("Ana", 22));
-        personService.addPerson(new Person("Mihai", 23));
         List<Person> allPersons = personService.getAllPersons();
 
         List<Person> expectedPersons = List.of(
@@ -69,10 +67,6 @@ public class PersonServiceTest {
     @Test
     @DisplayName("CALL METHOD THAT RETURNS LIST OF NAME OF PERSONS")
     public void callGetAllPersonNames() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
-        personService.addPerson(new Person("Ana", 22));
-        personService.addPerson(new Person("Mihai", 23));
         List<String> allPersonNames = personService.getAllPersonNames();
 
         List<String> expectedPersonsNames = List.of("Alex", "Ana", "Mihai");
@@ -83,10 +77,6 @@ public class PersonServiceTest {
     @Test
     @DisplayName("CALL METHOD THAT RETURNS LIST OF PERSONS OLDER THAN AN AGE")
     public void callGetPersonsOlderThan() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
-        personService.addPerson(new Person("Ana", 22));
-        personService.addPerson(new Person("Mihai", 23));
         List<Person> allPersonsOlderThan = personService.getPersonsOlderThan(22);
 
         List<Person> expectedPersons = List.of(
@@ -99,33 +89,18 @@ public class PersonServiceTest {
     @Test
     @DisplayName("THROWS AN EXCEPTION IF THE AGE PARAMETER IS INVALID ON METHOD getPersonsOlderThan()")
     public void methodThrowsExceptionIfAgeIsInvalid() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
-        personService.addPerson(new Person("Ana", 22));
-        personService.addPerson(new Person("Mihai", 23));
-
         org.junit.jupiter.api.Assertions.assertThrows(InvalidParameterException.class, () -> personService.getPersonsOlderThan(-22));
     }
 
     @Test
     @DisplayName("THROWS AN EXCEPTION IF THE PERSON WITH name IS NOT IN THE LIST IN getPerson()")
     public void methodThrowsExceptionIfNameIsNotFoundInList() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
-        personService.addPerson(new Person("Ana", 22));
-        personService.addPerson(new Person("Mihai", 23));
-
-        org.junit.jupiter.api.Assertions.assertThrows(ObjectNotFoundInListException.class, () -> personService.getPerson("Aleeeex"));
+        org.junit.jupiter.api.Assertions.assertThrows(ObjectNotFoundInListException.class, () -> personService.getPerson("NonexistentName"));
     }
 
     @Test
     @DisplayName("THROWS AN EXCEPTION IF THE PERSON WITH id IS NOT IN THE LIST IN getPersonById()")
     public void methodThrowsExceptionIfIdIsNotFoundInList() {
-        PersonService personService = new PersonService();
-        personService.addPerson(new Person("Alex", 21));
-        personService.addPerson(new Person("Ana", 22));
-        personService.addPerson(new Person("Mihai", 23));
-
-        org.junit.jupiter.api.Assertions.assertThrows(IdNotFoundException.class, () -> personService.getPersonById(66));
+        org.junit.jupiter.api.Assertions.assertThrows(IdNotFoundException.class, () -> personService.getPersonById(99));
     }
 }
