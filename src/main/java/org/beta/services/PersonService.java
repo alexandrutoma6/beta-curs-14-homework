@@ -2,6 +2,7 @@ package org.beta.services;
 
 import org.beta.exceptions.IdNotFoundException;
 import org.beta.exceptions.InvalidParameterException;
+import org.beta.exceptions.ObjectNotFoundInListException;
 import org.beta.models.Person;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class PersonService {
     }
 
     public List<Person> getPersonsOlderThan(int age) {
-        validate(age);
+        validateAge(age);
         List<Person> result = new ArrayList<>(list);
         for (Person person : list) {
             if (person.age() <= age) {
@@ -56,9 +57,28 @@ public class PersonService {
         return result;
     }
 
-    private void validate(int age) {
+    private void validateAge(int age) {
         if (age < 0 || age > 120) {
             throw new InvalidParameterException("Age is invalid");
         }
     }
+
+    public Person getPerson(String name) throws ObjectNotFoundInListException {
+        for (Person person : list) {
+            if (person.name().equals(name)) {
+                return person;
+            }
+        }
+        throw new ObjectNotFoundInListException();
+    }
+
+    public Person getPersonById(int id){
+        for (Person person : list) {
+            if (person.id().equals(id)) {
+                return person;
+            }
+        }
+        throw new IdNotFoundException();
+    }
+
 }

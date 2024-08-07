@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.beta.exceptions.IdNotFoundException;
 import org.beta.exceptions.InvalidParameterException;
 import org.beta.exceptions.NullParameterException;
+import org.beta.exceptions.ObjectNotFoundInListException;
 import org.beta.models.Person;
 import org.beta.services.PersonService;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +97,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    @DisplayName("THROWS AN EXCEPTION IF THE AGE PARAMETER IS INVALID")
+    @DisplayName("THROWS AN EXCEPTION IF THE AGE PARAMETER IS INVALID ON METHOD getPersonsOlderThan()")
     public void methodThrowsExceptionIfAgeIsInvalid() {
         PersonService personService = new PersonService();
         personService.addPerson(new Person("Alex", 21));
@@ -104,5 +105,27 @@ public class PersonServiceTest {
         personService.addPerson(new Person("Mihai", 23));
 
         org.junit.jupiter.api.Assertions.assertThrows(InvalidParameterException.class, () -> personService.getPersonsOlderThan(-22));
+    }
+
+    @Test
+    @DisplayName("THROWS AN EXCEPTION IF THE PERSON WITH name IS NOT IN THE LIST IN getPerson()")
+    public void methodThrowsExceptionIfNameIsNotFoundInList() {
+        PersonService personService = new PersonService();
+        personService.addPerson(new Person("Alex", 21));
+        personService.addPerson(new Person("Ana", 22));
+        personService.addPerson(new Person("Mihai", 23));
+
+        org.junit.jupiter.api.Assertions.assertThrows(ObjectNotFoundInListException.class, () -> personService.getPerson("Aleeeex"));
+    }
+
+    @Test
+    @DisplayName("THROWS AN EXCEPTION IF THE PERSON WITH id IS NOT IN THE LIST IN getPersonById()")
+    public void methodThrowsExceptionIfIdIsNotFoundInList() {
+        PersonService personService = new PersonService();
+        personService.addPerson(new Person("Alex", 21));
+        personService.addPerson(new Person("Ana", 22));
+        personService.addPerson(new Person("Mihai", 23));
+
+        org.junit.jupiter.api.Assertions.assertThrows(IdNotFoundException.class, () -> personService.getPersonById(66));
     }
 }
