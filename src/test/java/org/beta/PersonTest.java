@@ -1,6 +1,5 @@
 package org.beta;
 
-import org.assertj.core.api.Assertions;
 import org.beta.exceptions.InvalidParameterException;
 import org.beta.exceptions.NullParameterException;
 import org.beta.models.Person;
@@ -12,7 +11,13 @@ public class PersonTest {
     @Test
     @DisplayName("INSTANTIATE CLASS")
     public void instantiateClass() {
-        Person person = new Person("Alex", 15);
+        new Person(1, "Alex", 15);
+    }
+
+    @Test
+    @DisplayName("CREATE PERSON WITHOUT ID")
+    public void instantiateClassWithoutID() {
+        new Person("Alex", 15);
     }
 
     @Test

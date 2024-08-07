@@ -4,15 +4,21 @@ import org.beta.exceptions.InvalidParameterException;
 import org.beta.exceptions.NullParameterException;
 
 public record Person(
-        int id,
+        Integer id,
         String name,
         int age
 ) {
-    private static int nextId = 1;
+    // Constructor with id
+    public Person(Integer id, String name, int age) {
+        this.id = id;
+        this.name = validateName(name);
+        this.age = validateAge(age);
+    }
 
     public Person(String name, int age) {
-        this(nextId++, validateName(name), validateAge(age));
+        this(null, validateName(name), validateAge(age));
     }
+
 
     private static String validateName(String name) {
         if (name == null) {
@@ -22,7 +28,7 @@ public record Person(
     }
 
     private static int validateAge(int age) {
-        if (age < 0 || age > 150) {
+        if (age < 0 || age > 120) {
             throw new InvalidParameterException("Invalid parameter");
         }
         return age;
