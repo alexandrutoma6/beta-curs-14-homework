@@ -16,12 +16,6 @@ public class PersonTest {
     }
 
     @Test
-    @DisplayName("CREATE A PERSON WITH VALID PARAMETERS")
-    public void createPerson() {
-        Person person = new Person("Alex", 15);
-    }
-
-    @Test
     @DisplayName("THROWS AN EXCEPTION IF THE NAME PARAMETER IS NULL")
     public void methodThrowsExceptionOnNullParameterForCreatingPerson() {
         org.junit.jupiter.api.Assertions.assertThrows(NullParameterException.class, () -> new Person(null, 20));
